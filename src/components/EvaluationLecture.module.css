@@ -13,10 +13,23 @@
 
 .button{
     width: 150px;
-}
-.img{
-    width: 150px;
     height: 150px;
+    background-repeat: no-repeat;
+    background-size:cover;
+    
+    
+}
+ .good_mark{
+    background-image: url('../img/iconsForRating/good_mark.jpg');
+    
+}
+.satisfactory_mark{
+    background-image: url('../img/iconsForRating/satisfactory_mark.jpg');
+    
+}
+.bad_mark{
+    background-image: url('../img/iconsForRating/bad_mark.png');
+    
 }
 
 .evaluation_lecture__statistics{

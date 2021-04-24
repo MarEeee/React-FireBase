@@ -3,6 +3,18 @@ import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
+import  firebase from 'firebase';
+const firebaseConfig = {
+    apiKey: "AIzaSyC_1Q_Z7C7UqgEeJiek1wgaMTvbNzvXikg",
+    authDomain: "test-task-3eb2e.firebaseapp.com",
+    databaseURL: "https://test-task-3eb2e-default-rtdb.firebaseio.com",
+    projectId: "test-task-3eb2e",
+    storageBucket: "test-task-3eb2e.appspot.com",
+    messagingSenderId: "749745960273",
+    appId: "1:749745960273:web:9e54bff100ecbce0808f70",
+    measurementId: "G-5Q6XCYFBJ1"
+}
+firebase.initializeApp(firebaseConfig);
 
 ReactDOM.render(
   <React.StrictMode>

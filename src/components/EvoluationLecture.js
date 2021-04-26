@@ -6,6 +6,7 @@ import bad_mark from '../img/iconsForRating/bad_mark.png'
 
 import styles from "./EvaluationLecture.module.css"
 import  firebase from 'firebase';
+import uuid from 'react-uuid'
 
 
 const currentData = {
@@ -16,90 +17,86 @@ const currentData = {
     numberBadMarks: 14
 }
 
-// idLecture: "fsdf3124",
-//     nameLecture: "Basic React",
-//     numberGoodMarks: 9,
-//     numberSatisfactoryMarks: 32,
-//     numberBadMarks: 6
+
 
 class EvaluationLecture extends React.Component{
     constructor(props) {
         super(props)
-        this.handleSubmit = this.handleSubmit.bind(this);
         this.state = {
-            idLecture: currentData.idLecture,
-            nameLecture: currentData.nameLecture,
-            numberGoodMarks: currentData.numberGoodMarks,
-            numberSatisfactoryMarks: currentData.numberSatisfactoryMarks,
-            numberBadMarks: currentData.numberBadMarks
+            lecture:{
+                idLecture: currentData.idLecture,
+                nameLecture: currentData.nameLecture,
+                numberGoodMarks: currentData.numberGoodMarks,
+                numberSatisfactoryMarks: currentData.numberSatisfactoryMarks,
+                numberBadMarks: currentData.numberBadMarks
+            },
+            isVoted: localStorage.getItem(currentData.idLecture) === null ? false : true
         }
+        
       }
-      handleSubmit = ({target: {id}}) => {
-        console.log(id)
-    };
 
     btnClick = (e) => {
         if(e.target.id === "good_mark"){
             this.setState({
-                numberGoodMarks: ++this.state.numberGoodMarks
+                numberGoodMarks: ++this.state.lecture.numberGoodMarks
             })
         }
         if(e.target.id === "satisfactory_mark"){
                 this.setState({
-                    numberSatisfactoryMarks: ++this.state.numberSatisfactoryMarks
+                    numberSatisfactoryMarks: ++this.state.lecture.numberSatisfactoryMarks
                 })
         }
         if(e.target.id === "bad_mark") {
                 this.setState({
-                    numberBadMarks: ++this.state.numberBadMarks
+                    numberBadMarks: ++this.state.lecture.numberBadMarks
                 })
             }
-        // console.log(this.state)
-        // firebase.auth()
-        //     .catch(error => console.log(error))
-        firebase.database().ref('lectures/' + this.state.idLecture).set(this.state);
+        localStorage.setItem(this.state.lecture.idLecture, uuid())
+        this.setState({
+            isVoted: true
+        })
+        firebase.database().ref('lectures/' + this.state.lecture.idLecture).set(this.state.lecture);
     };
 
     componentDidMount(){
-        const database = firebase.database();
-        // console.log(database);
+        localStorage.clear();
     }
 
     render(){
         return(
             <div className = {styles.evaluation_lecture__form}>
-                <h1 className = {styles.evaluation_lecture__name}>{this.state.nameLecture}</h1>
-                
-                 <div className = {styles.evaluation_lecture__buttons}>
-                    <button id = "good_mark" className = {styles.button + " " + styles.good_mark}   onClick = {this.btnClick}></button>
+                {
+                this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
+                <>
+                    <h1 className = {styles.evaluation_lecture__name}>{this.state.lecture.nameLecture}</h1>
+                    
+                    <div className = {styles.evaluation_lecture__buttons}>
+                        <button id = "good_mark" className = {styles.button + " " + styles.good_mark}   onClick = {this.btnClick}></button>
 
-                    <button id = "satisfactory_mark" className = {styles.button + " " + styles.satisfactory_mark} onClick = {this.btnClick}></button>
+                        <button id = "satisfactory_mark" className = {styles.button + " " + styles.satisfactory_mark} onClick = {this.btnClick}></button>
 
-                    <button id = "bad_mark" className = {styles.button + " " + styles.bad_mark} onClick = {this.btnClick}></button>
-                </div>
-                
-                
-               
+                        <button id = "bad_mark" className = {styles.button + " " + styles.bad_mark} onClick = {this.btnClick}></button>
+                    </div>
 
+                    <h2>Statistics</h2>
+                    <ul className = {styles.evaluation_lecture__statistics}>
+                        <li className = "">
+                            <img src = {good_mark} style = {{wight: "50px", height: "50px"}}></img>
+                            <span>{this.state.lecture.numberGoodMarks}</span>
+                        </li>
 
-                <h2>Statistics</h2>
-                <ul className = {styles.evaluation_lecture__statistics}>
-                    <li className = "">
-                        <img src = {good_mark} style = {{wight: "50px", height: "50px"}}></img>
-                        <span>{this.state.numberGoodMarks}</span>
-                    </li>
+                        <li className = "">
+                            <img src = {satisfactory_mark} style = {{wight: "50px", height: "50px"}}></img>
+                            <span>{this.state.lecture.numberSatisfactoryMarks}</span>
+                        </li>
 
-                    <li className = "">
-                        <img src = {satisfactory_mark} style = {{wight: "50px", height: "50px"}}></img>
-                        <span>{this.state.numberSatisfactoryMarks}</span>
-                    </li>
-
-                    <li className = "">
-                        <img src = {bad_mark} style = {{wight: "50px", height: "50px"}}></img>
-                        <span>{this.state.numberBadMarks}</span>
-                    </li>
-                </ul>
-                
+                        <li className = "">
+                            <img src = {bad_mark} style = {{wight: "50px", height: "50px"}}></img>
+                            <span>{this.state.lecture.numberBadMarks}</span>
+                        </li>
+                    </ul>
+                </>
+                }
             </div>
         )
     }

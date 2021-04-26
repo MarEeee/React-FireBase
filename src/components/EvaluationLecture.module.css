@@ -33,5 +33,8 @@
 }
 
 .evaluation_lecture__statistics{
+    
     list-style: none;
+    margin: 0;
+    padding: 0;
 }

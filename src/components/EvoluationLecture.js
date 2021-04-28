@@ -8,8 +8,8 @@ import styles from "./EvaluationLecture.module.css"
 import  firebase from 'firebase';
 import uuid from 'react-uuid'
 
-
-const currentData = {
+const idLecture = "421452";
+var currentData = {
     idLecture: "421452",
     nameLecture: "Advansed React",
     numberGoodMarks: 42,
@@ -23,16 +23,9 @@ class EvaluationLecture extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-            lecture:{
-                idLecture: currentData.idLecture,
-                nameLecture: currentData.nameLecture,
-                numberGoodMarks: currentData.numberGoodMarks,
-                numberSatisfactoryMarks: currentData.numberSatisfactoryMarks,
-                numberBadMarks: currentData.numberBadMarks
-            },
-            isVoted: localStorage.getItem(currentData.idLecture) === null ? false : true
+            lecture:currentData,
+            isVoted: localStorage.getItem(idLecture) === null ? false : true,
         }
-        
       }
 
     btnClick = (e) => {
@@ -56,17 +49,25 @@ class EvaluationLecture extends React.Component{
             isVoted: true
         })
         firebase.database().ref('lectures/' + this.state.lecture.idLecture).set(this.state.lecture);
+        
+        
     };
 
     componentDidMount(){
+        // firebase.database().ref('lectures/' + idLecture).once('value', (data)=>{
+        //     this.setState({
+        //         lecture: data.val()
+        //     })  
+        // })
         localStorage.clear();
     }
 
     render(){
+        
         return(
             <div className = {styles.evaluation_lecture__form}>
                 {
-                this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
+                // this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
                 <>
                     <h1 className = {styles.evaluation_lecture__name}>{this.state.lecture.nameLecture}</h1>
                     

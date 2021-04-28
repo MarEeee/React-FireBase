@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import  firebase from 'firebase';
+
 const firebaseConfig = {
     apiKey: "AIzaSyC_1Q_Z7C7UqgEeJiek1wgaMTvbNzvXikg",
     authDomain: "test-task-3eb2e.firebaseapp.com",
@@ -15,6 +16,8 @@ const firebaseConfig = {
     measurementId: "G-5Q6XCYFBJ1"
 }
 firebase.initializeApp(firebaseConfig);
+
+
 
 ReactDOM.render(
   <React.StrictMode>

@@ -5,6 +5,11 @@
     justify-content: center;
     align-items: center;
 }
+
+.evaluation_lecture__help_us{
+    margin:0 0 15px 0;
+}
+
 .evaluation_lecture__buttons{
     display: flex;
     flex-direction: row;
@@ -15,20 +20,18 @@
     height: 150px;
     background-repeat: no-repeat;
     background-size:cover;
-    
-    
 }
- .good_mark{
+
+.good_mark{
     background-image: url('../img/iconsForRating/good_mark.jpg');
-    
 }
+
 .satisfactory_mark{
     background-image: url('../img/iconsForRating/satisfactory_mark.jpg');
-    
 }
+
 .bad_mark{
     background-image: url('../img/iconsForRating/bad_mark.png');
-    
 }
 
 .evaluation_lecture__statistics{
@@ -36,12 +39,13 @@
     margin: 0;
     padding: 0;
 }
+
 .stat{
     display: flex;
     align-items: center;
 }
+
 .statistics__value{
     margin-left:10px;
     font-size: 20px;
-    
 }

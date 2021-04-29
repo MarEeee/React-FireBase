@@ -52,6 +52,7 @@ class EvaluationLecture extends React.Component{
             lecture:(await firebase.database().ref('lectures/' + this.props.idLecture).once('value')).val(), // Решил не добавлять проверку на то, существует ли лекцию в БД.
             isLoading: true
         }); 
+        localStorage.clear();
     }
 
     render(){
@@ -60,10 +61,11 @@ class EvaluationLecture extends React.Component{
             <div className = {styles.evaluation_lecture__form}>
                 {!this.state.isLoading? null: 
                 <>
-                    {
-                    this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
+                    
+                    {this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
                     <>
                         <h1 className = {styles.evaluation_lecture__name}>{this.state.lecture.nameLecture}</h1>
+                        <p className = {styles.evaluation_lecture__help_us}> Help us become better - rate the lecture!</p>
                         
                         <div className = {styles.evaluation_lecture__buttons}>
                             <button id = "good_mark" className = {styles.button + " " + styles.good_mark}   onClick = {this.btnClick}></button>

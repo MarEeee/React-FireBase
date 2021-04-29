@@ -52,7 +52,6 @@ class EvaluationLecture extends React.Component{
             lecture:(await firebase.database().ref('lectures/' + this.props.idLecture).once('value')).val(), // Решил не добавлять проверку на то, существует ли лекцию в БД.
             isLoading: true
         }); 
-        localStorage.clear();
     }
 
     render(){

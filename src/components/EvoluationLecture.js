@@ -8,31 +8,27 @@ import styles from "./EvaluationLecture.module.css"
 import  firebase from 'firebase';
 import uuid from 'react-uuid'
 
-const idLecture = "421452";
-var currentData = {
-    idLecture: "421452",
-    nameLecture: "Advansed React",
-    numberGoodMarks: 42,
-    numberSatisfactoryMarks: 356,
-    numberBadMarks: 14
-}
-
-
-
 class EvaluationLecture extends React.Component{
     constructor(props) {
         super(props)
         this.state = {
-            lecture:currentData,
-            isVoted: localStorage.getItem(idLecture) === null ? false : true,
-        }
+            lecture:{  // объект который хранит информацию о лекции
+                idLecture: "",
+                nameLecture: "default value",
+                numberGoodMarks: 0,
+                numberSatisfactoryMarks: 0,
+                numberBadMarks: 0
+            },
+            isLoading: false, // принимает значение true в тот момент когда данные с бд получены, в этот же момент начинает отрисовку
+            isVoted: localStorage.getItem(this.props.idLecture) === null ? false : true, // введена для проверки в локальном хранилище пользователя id лекции.
+        }                                                                                // Если она там есть -> пользователь уже голосовал -> отрисовывавем для него другой блок
       }
 
     btnClick = (e) => {
-        if(e.target.id === "good_mark"){
-            this.setState({
-                numberGoodMarks: ++this.state.lecture.numberGoodMarks
-            })
+        if(e.target.id === "good_mark"){                              // проверка на то, какая из кнопок была нажата
+            this.setState({                                           // обновляем состояние для numberGoodMarks и перерисовывем его. В данной реализации это не имеет смысла 
+                numberGoodMarks: ++this.state.lecture.numberGoodMarks // т.к после нажатия на любую из кнопок с помощью условного рендеринга рисуем блок "Спасибо за голосование".                                           
+            })                                                        // Решил оставить, дабы продемонстрировать работу с state
         }
         if(e.target.id === "satisfactory_mark"){
                 this.setState({
@@ -44,21 +40,18 @@ class EvaluationLecture extends React.Component{
                     numberBadMarks: ++this.state.lecture.numberBadMarks
                 })
             }
-        localStorage.setItem(this.state.lecture.idLecture, uuid())
+        localStorage.setItem(this.state.lecture.idLecture, uuid()) //добавляем в localStage информацию о том, что пользователь уже голосвал за лекцию с данным id
         this.setState({
             isVoted: true
         })
-        firebase.database().ref('lectures/' + this.state.lecture.idLecture).set(this.state.lecture);
-        
-        
+        firebase.database().ref('lectures/' + this.state.lecture.idLecture).set(this.state.lecture); // пушим обновления в бд
     };
 
-    componentDidMount(){
-        // firebase.database().ref('lectures/' + idLecture).once('value', (data)=>{
-        //     this.setState({
-        //         lecture: data.val()
-        //     })  
-        // })
+    async componentDidMount(){
+        this.setState({
+            lecture:(await firebase.database().ref('lectures/' + this.props.idLecture).once('value')).val(), // Решил не добавлять проверку на то, существует ли лекцию в БД.
+            isLoading: true
+        }); 
         localStorage.clear();
     }
 
@@ -66,36 +59,41 @@ class EvaluationLecture extends React.Component{
         
         return(
             <div className = {styles.evaluation_lecture__form}>
-                {
-                // this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
+                {!this.state.isLoading? null: 
                 <>
-                    <h1 className = {styles.evaluation_lecture__name}>{this.state.lecture.nameLecture}</h1>
+                    {
+                    this.state.isVoted ? <h1>Спасибо за голосование!</h1>: 
+                    <>
+                        <h1 className = {styles.evaluation_lecture__name}>{this.state.lecture.nameLecture}</h1>
+                        
+                        <div className = {styles.evaluation_lecture__buttons}>
+                            <button id = "good_mark" className = {styles.button + " " + styles.good_mark}   onClick = {this.btnClick}></button>
+
+                            <button id = "satisfactory_mark" className = {styles.button + " " + styles.satisfactory_mark} onClick = {this.btnClick}></button>
+
+                            <button id = "bad_mark" className = {styles.button + " " + styles.bad_mark} onClick = {this.btnClick}></button>
+                        </div>
                     
-                    <div className = {styles.evaluation_lecture__buttons}>
-                        <button id = "good_mark" className = {styles.button + " " + styles.good_mark}   onClick = {this.btnClick}></button>
+                        <h2>Statistics</h2>
 
-                        <button id = "satisfactory_mark" className = {styles.button + " " + styles.satisfactory_mark} onClick = {this.btnClick}></button>
+                        <ul className = {styles.evaluation_lecture__statistics}>
+                            <li className = {styles.stat}>
+                                <img src = {good_mark} style = {{wight: "50px", height: "50px"}} alt = "happy smile"></img>
+                                <span className = {styles.statistics__value}>{this.state.lecture.numberGoodMarks}</span>
+                            </li>
 
-                        <button id = "bad_mark" className = {styles.button + " " + styles.bad_mark} onClick = {this.btnClick}></button>
-                    </div>
+                            <li className = {styles.stat}>
+                                <img src = {satisfactory_mark} style = {{wight: "50px", height: "50px"}} alt = "serious smile"></img>
+                                <span className = {styles.statistics__value}>{this.state.lecture.numberSatisfactoryMarks}</span>
+                            </li>
 
-                    <h2>Statistics</h2>
-                    <ul className = {styles.evaluation_lecture__statistics}>
-                        <li className = "">
-                            <img src = {good_mark} style = {{wight: "50px", height: "50px"}}></img>
-                            <span>{this.state.lecture.numberGoodMarks}</span>
-                        </li>
-
-                        <li className = "">
-                            <img src = {satisfactory_mark} style = {{wight: "50px", height: "50px"}}></img>
-                            <span>{this.state.lecture.numberSatisfactoryMarks}</span>
-                        </li>
-
-                        <li className = "">
-                            <img src = {bad_mark} style = {{wight: "50px", height: "50px"}}></img>
-                            <span>{this.state.lecture.numberBadMarks}</span>
-                        </li>
-                    </ul>
+                            <li className = {styles.stat}>
+                                <img src = {bad_mark} style = {{wight: "50px", height: "50px"}} alt = "sad smile"></img>
+                                <span className = {styles.statistics__value}>{this.state.lecture.numberBadMarks}</span>
+                            </li>
+                        </ul>
+                    </>
+                    }
                 </>
                 }
             </div>

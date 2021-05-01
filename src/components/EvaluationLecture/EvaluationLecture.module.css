@@ -1,5 +1,5 @@
 .evaluation_lecture__form{
-    width: 50%;
+    width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -23,15 +23,15 @@
 }
 
 .good_mark{
-    background-image: url('../img/iconsForRating/good_mark.jpg');
+    background-image: url('../../img/iconsForRating/good_mark.jpg');
 }
 
 .satisfactory_mark{
-    background-image: url('../img/iconsForRating/satisfactory_mark.jpg');
+    background-image: url('../../img/iconsForRating/satisfactory_mark.jpg');
 }
 
 .bad_mark{
-    background-image: url('../img/iconsForRating/bad_mark.png');
+    background-image: url('../../img/iconsForRating/bad_mark.png');
 }
 
 .evaluation_lecture__statistics{

@@ -1,8 +1,8 @@
 import React from 'react'
 
-import good_mark from '../img/iconsForRating/good_mark.jpg'
-import satisfactory_mark from '../img/iconsForRating/satisfactory_mark.jpg'
-import bad_mark from '../img/iconsForRating/bad_mark.png'
+import good_mark from '../../img/iconsForRating/good_mark.jpg'
+import satisfactory_mark from '../../img/iconsForRating/satisfactory_mark.jpg'
+import bad_mark from '../../img/iconsForRating/bad_mark.png'
 
 import styles from "./EvaluationLecture.module.css"
 import  firebase from 'firebase';

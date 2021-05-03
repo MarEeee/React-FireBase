@@ -7,6 +7,7 @@ import bad_mark from '../../img/iconsForRating/bad_mark.png'
 import styles from "./EvaluationLecture.module.css"
 import  firebase from 'firebase';
 import uuid from 'react-uuid'
+import {Link} from 'react-router-dom'
 
 class EvaluationLecture extends React.Component{
     constructor(props) {
@@ -52,6 +53,7 @@ class EvaluationLecture extends React.Component{
             lecture:(await firebase.database().ref('lectures/' + this.props.idLecture).once('value')).val(), // Решил не добавлять проверку на то, существует ли лекцию в БД.
             isLoading: true
         }); 
+        localStorage.clear();
     }
 
     render(){
@@ -94,6 +96,7 @@ class EvaluationLecture extends React.Component{
                         </ul>
                     </>
                     }
+                    <Link to = "/home">Назад</Link>
                 </>
                 }
             </div>
